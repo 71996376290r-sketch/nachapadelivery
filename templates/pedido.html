@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Monte seu Pedido - Na Chapa Hall</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header>🍔 Monte seu Pedido - Na Chapa Hall</header>
+<div class="container">
+  {% for p in produtos %}
+  <div class="card" data-id="{{ p.id }}" data-nome="{{ p.nome }}" data-preco="{{ p.preco }}">
+    <img src="{{ p.imagem or url_for('static', filename='img/placeholder.jpg') }}" alt="{{ p.nome }}">
+    <h3>{{ p.nome }}</h3>
+    <p>R$ {{ "%.2f"|format(p.preco) }}</p>
+    <div class="qtd">
+      <button class="btn-qtd" onclick="alterarQtd(this, -1)">−</button>
+      <span class="qtd-num">0</span>
+      <button class="btn-qtd" onclick="alterarQtd(this, 1)">+</button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<button id="finalizar" onclick="finalizarPedido()">Finalizar Pedido - Total: R$ <span id='total'>0,00</span></button>
+<script>
+function alterarQtd(btn, delta) {
+  const card = btn.closest('.card');
+  const qtdSpan = card.querySelector('.qtd-num');
+  let qtd = parseInt(qtdSpan.textContent) + delta;
+  if (qtd < 0) qtd = 0;
+  qtdSpan.textContent = qtd;
+  atualizarTotal();
+}
+function atualizarTotal() {
+  let total = 0;
+  document.querySelectorAll('.card').forEach(card => {
+    const qtd = parseInt(card.querySelector('.qtd-num').textContent);
+    const preco = parseFloat(card.dataset.preco);
+    total += qtd * preco;
+  });
+  document.getElementById('total').textContent = total.toFixed(2).replace('.', ',');
+}
+async function finalizarPedido() {
+  const itens = [];
+  document.querySelectorAll('.card').forEach(card => {
+    const qtd = parseInt(card.querySelector('.qtd-num').textContent);
+    if (qtd > 0) {
+      itens.push({id: card.dataset.id, nome: card.dataset.nome, qtd: qtd, preco: card.dataset.preco});
+    }
+  });
+  if (itens.length === 0) { alert('Adicione ao menos 1 item'); return; }
+  const payload = { id_cliente: {{ cliente.id }}, itens };
+  const res = await fetch('/salvar_pedido', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+  const j = await res.json();
+  alert(j.mensagem || 'Pedido enviado!');
+  window.location.href = '/';
+}
+</script>
+</body>
+</html>
