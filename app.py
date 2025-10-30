@@ -6,9 +6,9 @@ from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 
-DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://nachapadelivery_user:CaEHzv7Yr41QiSOAjX5RX5mTByTUPRAD@dpg-d402pnruibrs73b0mmh0-a.ohio-postgres.render.com:5432/nachapadelivery')
+#DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://nachapadelivery_user:CaEHzv7Yr41QiSOAjX5RX5mTByTUPRAD@dpg-d402pnruibrs73b0mmh0-a.ohio-postgres.render.com:5432/nachapadelivery')
 
-init_db(DATABASE_URL)
+#init_db(DATABASE_URL)
 
 @app.route('/')
 def index():
