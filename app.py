@@ -6,7 +6,14 @@ from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 
-DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://nachapadelivery_user:CaEHzv7Yr41QiSOAjX5RX5mTByTUPRAD@dpg-d402pnruibrs73b0mmh0-a.ohio-postgres.render.com:5432/nachapadelivery')
+DATABASE_URL = os.environ.get(
+    Server [localhost]: dpg-d43e2ommcj7s73b062jg-a.oregon-postgres.render.com
+Database [postgres]: halldb
+Port [5432]: 
+Username [postgres]: halldb_user
+Password for user halldb_user: dCu5hXO8okI8Qz0j9LK9i7AcZI3LYND0
+
+)
 
 init_db(DATABASE_URL)
 
